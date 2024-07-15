@@ -1,0 +1,78 @@
+SQL Queries
+
+1.CREATING ADMIN_LOGIN TABLE
+  CREATE TABLE Administrator (
+   AdminId  INT NOT NULL
+   UserName VARCHAR (20) NOT NULL,
+   Password VARCHAR (10) NOT NULL,
+   PRIMARY KEY CLUSTERED (AdminId ASC));
+
+ 2.CREATING DONAR TABLE
+ CREATE TABLE Donar(
+    Donar_Id  INT NOT NULL PRIMARY KEY, 
+    names VARCHAR(20) NOT NULL, 
+    PostingDate DATE NOT NULL, 
+    Gender varchar(2) NOT NULL, 
+    BloodGroup varchar(4) not null,
+    Age INT NOT NULL, 
+    Phone no CHAR(10) NOT NULL, 
+    Email CHAR(20) NOT NULL, 
+    Address VARCHAR(80) NOT NULL, 
+    Status CHAR(1) NOT NULL);
+
+3.CREATING REGISTER TABLE
+CREATE TABLE Register (
+    Name VARCHAR(20) NOT NULL,
+    Phone_no CHAR(10) NOT NULL,
+    Age INT NOT NULL, 
+    Gender VARCHAR(8) NOT NULL,
+    Weight Decimal(5,2) Not Null);
+
+4.CREATING BLOODGROUP TABLE
+CREATE TABLE BloodGroup (
+    Ids INT NOT NULL,
+    Blood_Group CHAR (3) NOT NULL,
+    name varchar(20)   NOT NULL,
+    PRIMARY KEY CLUSTERED (Ids ASC),
+    FOREIGN KEY (Ids) REFERENCES Donar (Donar_Id) ON DELETE CASCADE);
+
+4.5 	INSERTION OF TUPLES
+INSERTION OF VALUES INTO ADMIN_LOGIN:
+INSERT INTO `admin_login`(`UserName`, `Password`) VALUES 
+(‘abhishree’,’BTS’);
+(‘amrutha’,’bts’);
+
+INSERTION OF VALUES INTO DONAR:
+INSERT INTO `donar`(`Donar_Id`, `names`, `Age`, `Posting_Date`, `Gender`, `BloodGroup`, `Phone_no`, `Address`, `Email`, `Status`) VALUES 
+(1,'Rachita',20,'2020-12-29','F','O+','+91995674839','padmanabhanagar','rachita@gmail.com','N');
+(2,'Abhishree',21,'2020-12-30','F','A+','+919980977252','RR nagar','abhi@gmail.com','Y');
+(3,'Amrutha',20,'2020-12-20','F','B+','+91995375978','Rajarajeshwarinagar','amrutha@gmail.com','N');
+(4,'Sindhu',20,'2020-12-20','F','O-','+919880692234','whitefield','sindhu@gmail.com','N');
+
+INSERTION OF VALUES INTO REGISTER:
+INSERT INTO `register`(`Name`, `Age`, `Phone_no`, `Weight`, `Gender`) VALUES ('Abhishek',21,'+917658439584',75,'M');
+('Akshay',20,'+917658445584',77,'M');
+('Bhoomika',20,'+91765345784',55,'F');
+('Divyashree',20,'+91797485932',52,'F');
+
+INSERTION OF VALUES INTO BLOODGROUP:
+INSERT INTO `bloodgroup`(`Id`, `Blood_Group`, `Name`) VALUES
+ (1,'O+','Rachita');
+ (2,'A+','Abhishree');
+ (3,'B+','Amrutha');
+ (4,'O-','Sindhu');
+
+4.6 	CREATION OF TRIGGERS
+	A database trigger is procedural code that is automatically executed in response to certain events on a particular table or view in a database. The trigger is mostly used for maintaining the integrity of the information on the database. For example, when a new record (representing a new donar) is added to the donar table, only if the age limitation criteria is met(age>18 and age<60). Triggers can also be used to log historical data.
+DELIMITER |
+ CREATE TRIGGER ageLimitation BEFORE INSERT ON donar FOR EACH ROW   BEGIN IF NEW.age     < 18 THEN SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ERROR: AGE MUST BE ATLEAST     18 YEARS!'; END IF; 
+ END
+|
+DELIMITER ;
+
+2)DELIMITER |
+ CREATE TRIGGER ageCheck BEFORE INSERT ON donar FOR EACH ROW   BEGIN IF NEW.age    >60  THEN SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ERROR: AGE MUST BE BELOW  60 YEARS!'; END IF; 
+ END
+|
+DELIMITER ;
+
